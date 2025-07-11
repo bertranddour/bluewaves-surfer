@@ -38,14 +38,24 @@ export default defineConfig({
     'fs-extra',
     'glob'
   ],
-  banner: {
-    js: '"use client"'
+  banner: (ctx) => {
+    // Only add "use client" banner for React components, not CLI tools
+    if (ctx.format === 'esm' && ctx.entry && !ctx.entry.includes('cli/')) {
+      return {
+        js: '"use client"'
+      }
+    }
+    return {}
   },
   esbuildOptions(options) {
     options.jsx = 'automatic'
     options.target = 'node16'
   },
   onSuccess: async () => {
+    // Copy CSS files to dist
+    const fs = await import('fs-extra')
+    await fs.ensureDir('dist/styles')
+    await fs.copy('src/styles/globals.css', 'dist/styles/globals.css')
     console.log('✅ Build completed successfully!')
   }
 })

@@ -4,7 +4,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import ora from 'ora'
 import inquirer from 'inquirer'
-import { COMPONENT_REGISTRY } from '../components/index.js'
+import { COMPONENT_REGISTRY } from '../components/index'
 
 export interface AddComponentOptions {
   path?: string

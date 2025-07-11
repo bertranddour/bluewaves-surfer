@@ -5,7 +5,7 @@ import path from 'path'
 import ora from 'ora'
 import inquirer from 'inquirer'
 import { execa } from 'execa'
-import { COMPONENT_REGISTRY } from '../components/index.js'
+import { COMPONENT_REGISTRY } from '../components/index'
 
 export interface UpdateOptions {
   preview?: boolean
