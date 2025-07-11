@@ -19,6 +19,8 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
+  minify: false,
+  treeshake: true,
   external: [
     'react',
     'react-dom',
@@ -27,10 +29,23 @@ export default defineConfig({
     '@next/font',
     'framer-motion'
   ],
+  noExternal: [
+    'commander',
+    'chalk',
+    'ora',
+    'inquirer',
+    'execa',
+    'fs-extra',
+    'glob'
+  ],
   banner: {
     js: '"use client"'
   },
   esbuildOptions(options) {
     options.jsx = 'automatic'
+    options.target = 'node16'
+  },
+  onSuccess: async () => {
+    console.log('✅ Build completed successfully!')
   }
 })

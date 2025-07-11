@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: Run full test suite
+        run: |
+          pnpm typecheck
+          pnpm lint
+          pnpm test
+          pnpm build
+          
+      - name: Extract version from tag
+        id: extract_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        
+      - name: Verify package version matches tag
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          if [ "$PACKAGE_VERSION" != "${{ steps.extract_version.outputs.VERSION }}" ]; then
+            echo "Package version ($PACKAGE_VERSION) does not match tag (${{ steps.extract_version.outputs.VERSION }})"
+            exit 1
+          fi
+          
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ steps.extract_version.outputs.VERSION }}
+          body: |
+            ## Changes in v${{ steps.extract_version.outputs.VERSION }}
+            
+            See [CHANGELOG.md](https://github.com/bluewaves/surfer/blob/main/CHANGELOG.md) for detailed changes.
+            
+            ## Installation
+            
+            ```bash
+            npm install @bluewaves/surfer@${{ steps.extract_version.outputs.VERSION }}
+            ```
+            
+            ## Quick Start
+            
+            ```bash
+            npx @bluewaves/surfer init
+            ```
+          draft: false
+          prerelease: ${{ contains(steps.extract_version.outputs.VERSION, '-') }}
+          
+      - name: Update documentation
+        if: ${{ !contains(steps.extract_version.outputs.VERSION, '-') }}
+        run: |
+          # Could trigger documentation update here
+          echo "Release ${{ steps.extract_version.outputs.VERSION }} published successfully"

@@ -63,21 +63,21 @@ const CardHeader = React.forwardRef<
 CardHeader.displayName = "CardHeader"
 
 const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & {
+  HTMLHeadingElement,
+  React.HTMLAttributes<HTMLHeadingElement> & {
     level?: 1 | 2 | 3 | 4 | 5 | 6
   }
 >(({ className, level = 3, children, ...props }, ref) => {
-  const Comp = `h${level}` as keyof JSX.IntrinsicElements
+  const Comp = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   
-  return (
-    <Comp
-      ref={ref}
-      className={cn("font-semibold leading-none tracking-tight", className)}
-      {...props}
-    >
-      {children}
-    </Comp>
+  return React.createElement(
+    Comp,
+    {
+      ref,
+      className: cn("font-semibold leading-none tracking-tight", className),
+      ...props
+    },
+    children
   )
 })
 CardTitle.displayName = "CardTitle"

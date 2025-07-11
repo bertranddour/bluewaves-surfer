@@ -1,13 +1,50 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-const { initSurfer } = require('../dist/cli/init');
-const { addComponent } = require('../dist/cli/add');
-const { updateSurfer } = require('../dist/cli/update');
-const { analyzeSurfer } = require('../dist/cli/analyze');
-const { generateComponent } = require('../dist/cli/generate');
+const path = require('path');
+const fs = require('fs');
 
-const packageJson = require('../package.json');
+// Determine if we should use ESM or CJS builds
+const distPath = path.join(__dirname, '..', 'dist');
+const useESM = fs.existsSync(path.join(distPath, 'cli', 'init.js'));
+
+// Dynamic imports for better compatibility
+let initSurfer, addComponent, updateSurfer, analyzeSurfer, generateComponent;
+
+if (useESM) {
+  // Use dynamic import for ESM
+  Promise.all([
+    import('../dist/cli/init.js').then(m => ({ initSurfer: m.initSurfer })),
+    import('../dist/cli/add.js').then(m => ({ addComponent: m.addComponent })),
+    import('../dist/cli/update.js').then(m => ({ updateSurfer: m.updateSurfer })),
+    import('../dist/cli/analyze.js').then(m => ({ analyzeSurfer: m.analyzeSurfer })),
+    import('../dist/cli/generate.js').then(m => ({ generateComponent: m.generateComponent }))
+  ]).then(modules => {
+    setupCLI(modules.reduce((acc, mod) => ({ ...acc, ...mod }), {}));
+  }).catch(error => {
+    console.error('Failed to load CLI modules:', error);
+    process.exit(1);
+  });
+} else {
+  // Fallback to CJS
+  try {
+    const modules = {
+      initSurfer: require('../dist/cli/init.cjs').initSurfer,
+      addComponent: require('../dist/cli/add.cjs').addComponent,
+      updateSurfer: require('../dist/cli/update.cjs').updateSurfer,
+      analyzeSurfer: require('../dist/cli/analyze.cjs').analyzeSurfer,
+      generateComponent: require('../dist/cli/generate.cjs').generateComponent
+    };
+    setupCLI(modules);
+  } catch (error) {
+    console.error('Failed to load CLI modules:', error);
+    process.exit(1);
+  }
+}
+
+function setupCLI(modules) {
+  const { initSurfer, addComponent, updateSurfer, analyzeSurfer, generateComponent } = modules;
+  const packageJson = require('../package.json');
 
 program
   .name('surfer')
@@ -65,4 +102,5 @@ program
     // Launch Storybook or component playground
   });
 
-program.parse();
+  program.parse();
+}

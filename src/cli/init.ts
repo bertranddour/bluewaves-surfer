@@ -3,7 +3,7 @@ import inquirer from 'inquirer';
 import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
-import ora from 'ora';
+import ora, { type Ora } from 'ora';
 import { execa } from 'execa';
 
 interface SurferInitOptions {
@@ -133,11 +133,11 @@ async function promptForConfig(options: SurferInitOptions) {
     default: true
   });
   
-  const answers = await inquirer.prompt(questions);
+  const answers = await inquirer.prompt(questions as any);
   return { ...options, ...answers };
 }
 
-async function setupNextJsDependencies(config: any, spinner: ora.Ora) {
+async function setupNextJsDependencies(config: any, spinner: Ora) {
   spinner.text = 'Setting up Next.js dependencies...';
   
   const packageJsonPath = path.join(process.cwd(), 'package.json');
@@ -194,11 +194,11 @@ async function setupNextJsDependencies(config: any, spinner: ora.Ora) {
   await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
 }
 
-async function configureTailwind(config: any, spinner: ora.Ora) {
+async function configureTailwind(config: any, spinner: Ora) {
   spinner.text = 'Configuring Tailwind CSS v4...';
   
   // Tailwind config optimized for Next.js + Surfer
-  const tailwindConfig = \`import type { Config } from 'tailwindcss'
+  const tailwindConfig = `import type { Config } from 'tailwindcss'
 import { surferPreset } from '@bluewaves/surfer/tailwind'
 
 const config: Config = {
@@ -222,7 +222,7 @@ const config: Config = {
   plugins: []
 }
 
-export default config\`;
+export default config`;
   
   await fs.writeFile(
     path.join(process.cwd(), 'tailwind.config.ts'),
@@ -230,11 +230,11 @@ export default config\`;
   );
   
   // PostCSS config for Next.js
-  const postcssConfig = \`module.exports = {
+  const postcssConfig = `module.exports = {
   plugins: {
     '@tailwindcss/postcss': {}
   }
-}\`;
+}`;
   
   await fs.writeFile(
     path.join(process.cwd(), 'postcss.config.js'),
@@ -242,7 +242,7 @@ export default config\`;
   );
 }
 
-async function configureShadcn(config: any, spinner: ora.Ora) {
+async function configureShadcn(config: any, spinner: Ora) {
   spinner.text = 'Configuring shadcn/ui...';
   
   // components.json for shadcn/ui
@@ -274,7 +274,7 @@ async function configureShadcn(config: any, spinner: ora.Ora) {
   );
 }
 
-async function installDesignTokens(config: any, spinner: ora.Ora) {
+async function installDesignTokens(config: any, spinner: Ora) {
   spinner.text = 'Installing Surfer design tokens...';
   
   // Create lib directory
@@ -282,7 +282,7 @@ async function installDesignTokens(config: any, spinner: ora.Ora) {
   await fs.ensureDir(libDir);
   
   // Surfer design tokens
-  const designTokens = \`import { clsx, type ClassValue } from 'clsx'
+  const designTokens = `import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -297,7 +297,7 @@ export {
   getCardPadding,
   getGapClass,
   getBorderRadiusClass 
-} from '@bluewaves/surfer/tokens'\`;
+} from '@bluewaves/surfer/tokens'`;
   
   await fs.writeFile(
     path.join(libDir, 'utils.ts'),
@@ -326,7 +326,7 @@ export {
   );
 }
 
-async function setupCSSArchitecture(config: any, spinner: ora.Ora) {
+async function setupCSSArchitecture(config: any, spinner: Ora) {
   spinner.text = 'Setting up CSS architecture...';
   
   // Ensure app directory exists
@@ -334,7 +334,7 @@ async function setupCSSArchitecture(config: any, spinner: ora.Ora) {
   await fs.ensureDir(appDir);
   
   // Enhanced globals.css with Surfer system
-  const globalsCss = \`@import '@bluewaves/surfer/css';
+  const globalsCss = `@import '@bluewaves/surfer/css';
 @import 'tailwindcss';
 
 /* Surfer Design System - Next.js Optimized */
@@ -415,7 +415,7 @@ async function setupCSSArchitecture(config: any, spinner: ora.Ora) {
     content-visibility: auto;
     contain-intrinsic-size: 200px;
   }
-}\`;
+}`;
   
   await fs.writeFile(
     path.join(appDir, 'globals.css'),
@@ -423,7 +423,7 @@ async function setupCSSArchitecture(config: any, spinner: ora.Ora) {
   );
 }
 
-async function installSurferComponents(config: any, spinner: ora.Ora) {
+async function installSurferComponents(config: any, spinner: Ora) {
   spinner.text = 'Installing Surfer components...';
   
   // Create components directory structure
@@ -443,7 +443,7 @@ async function installSurferComponents(config: any, spinner: ora.Ora) {
   
   // This would copy enhanced components from Surfer templates
   // For now, we'll create a placeholder
-  const buttonComponent = \`import * as React from "react"
+  const buttonComponent = `import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
@@ -494,7 +494,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants }\`;
+export { Button, buttonVariants }`;
   
   await fs.writeFile(
     path.join(uiDir, 'button.tsx'),
@@ -502,8 +502,8 @@ export { Button, buttonVariants }\`;
   );
 }
 
-async function createTemplateFiles(config: any, spinner: ora.Ora) {
-  spinner.text = \`Creating \${config.template} template files...\`;
+async function createTemplateFiles(config: any, spinner: Ora) {
+  spinner.text = `Creating ${config.template} template files...`;
   
   if (config.withExamples) {
     // Create example pages based on template
@@ -523,7 +523,7 @@ function getTemplatePages(template: string) {
   if (template === 'dashboard') {
     pages.push({
       path: 'dashboard/page.tsx',
-      content: \`import { Button } from '@/components/ui/button'
+      content: `import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function Dashboard() {
@@ -543,18 +543,18 @@ export default function Dashboard() {
       </div>
     </div>
   )
-}\`
+}`
     });
   }
   
   return pages;
 }
 
-async function configureNextJs(config: any, spinner: ora.Ora) {
+async function configureNextJs(config: any, spinner: Ora) {
   spinner.text = 'Configuring Next.js...';
   
   // Update next.config.js for Surfer optimizations
-  const nextConfig = \`/** @type {import('next').NextConfig} */
+  const nextConfig = `/** @type {import('next').NextConfig} */
 const nextConfig = {
   // Surfer optimizations
   experimental: {
@@ -588,7 +588,7 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig\`;
+module.exports = nextConfig`;
   
   await fs.writeFile(
     path.join(process.cwd(), 'next.config.js'),
@@ -596,7 +596,7 @@ module.exports = nextConfig\`;
   );
 }
 
-async function installPackages(config: any, spinner: ora.Ora) {
+async function installPackages(config: any, spinner: Ora) {
   spinner.text = 'Installing packages...';
   
   try {
@@ -605,11 +605,11 @@ async function installPackages(config: any, spinner: ora.Ora) {
       stdio: 'pipe'
     });
   } catch (error) {
-    throw new Error(\`Failed to install packages with \${config.packageManager}\`);
+    throw new Error(`Failed to install packages with ${config.packageManager}`);
   }
 }
 
-async function initializeGit(config: any, spinner: ora.Ora) {
+async function initializeGit(config: any, spinner: Ora) {
   spinner.text = 'Initializing git...';
   
   try {
@@ -631,7 +631,7 @@ function printSurferSuccessMessage(config: any) {
   console.log(chalk.blue('🚀 What\'s next?'));
   console.log();
   console.log(chalk.white('1. Start your development server:'));
-  console.log(chalk.gray(\`   \${config.packageManager} run dev\`));
+  console.log(chalk.gray(`   ${config.packageManager} run dev`));
   console.log();
   console.log(chalk.white('2. Add more components:'));
   console.log(chalk.gray('   npx surfer add badge'));

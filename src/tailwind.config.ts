@@ -144,7 +144,7 @@ export const surferPreset: Config = {
   },
   plugins: [
     // Add Surfer-specific plugins
-    function({ addUtilities, addComponents, theme }) {
+    function({ addUtilities, addComponents, theme }: any) {
       // Surfer utility classes
       addUtilities({
         '.surfer-container': {
