@@ -3,16 +3,8 @@ import { defineConfig } from 'tsup'
 export default defineConfig({
   entry: {
     index: 'src/index.ts',
-    'tokens/index': 'src/tokens/index.ts',
     'components/index': 'src/components/index.ts',
-    'hooks/index': 'src/hooks/index.ts',
-    'utils/index': 'src/utils/index.ts',
-    'cli/init': 'src/cli/init.ts',
-    'cli/add': 'src/cli/add.ts',
-    'cli/update': 'src/cli/update.ts',
-    'cli/analyze': 'src/cli/analyze.ts',
-    'cli/generate': 'src/cli/generate.ts',
-    'tailwind.config': 'src/tailwind.config.ts'
+    'cli/init': 'src/cli/init.ts'
   },
   format: ['cjs', 'esm'],
   dts: true,

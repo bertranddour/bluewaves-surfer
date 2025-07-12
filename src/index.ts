@@ -9,18 +9,15 @@
 // Design Tokens
 export * from "./tokens"
 
-// Components
-export * from "./components/ui/button"
-export * from "./components/ui/card"
+// Design Tokens & Utilities (no styled components - pure token approach)
 
 // Utilities
 export * from "./lib/utils"
 
-// Configuration
-export { default as surferPreset } from "./tailwind.config"
+// Note: Tailwind CSS v4.1 uses CSS-based configuration instead of JS config
 
 // Version
-export const VERSION = "1.0.0"
+export const VERSION = "1.1.0"
 
 // Surfer brand
 export const SURFER = {

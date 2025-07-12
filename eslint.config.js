@@ -58,7 +58,9 @@ export default [
       '.next/',
       'coverage/',
       '*.config.js',
-      '*.config.ts'
+      '*.config.ts',
+      'bin/',
+      'templates/'
     ]
   }
 ]
