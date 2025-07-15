@@ -1,6 +1,6 @@
 {
   "name": "@bluewaves/surfer",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "🏄‍♂️ S-tier design system for Next.js + shadcn/ui",
   "type": "module",
   "main": "dist/index.js",
