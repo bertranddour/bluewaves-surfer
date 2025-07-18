@@ -32,6 +32,20 @@ Surfer is an **add-on layer** for shadcn/ui, not a replacement. We only provide 
 - `brown-*` → `oklch(...)` (not in Tailwind)
 - Plus enhanced: `red-*`, `orange-*`, `yellow-*`, `green-*`, `cyan-*`, `blue-*`, `indigo-*`, `purple-*`, `pink-*`
 
+### ✅ **Heroicons Integration**
+- Complete React icon library with all sizes and styles
+- `@heroicons/react/24/outline` → 24x24 outline icons
+- `@heroicons/react/24/solid` → 24x24 solid icons
+- `@heroicons/react/20/solid` → 20x20 solid icons
+- `@heroicons/react/16/solid` → 16x16 solid icons
+
+### ✅ **Pill Component System**
+- **Pill Buttons** → Professional rounded-full buttons with consistent sizing
+- **Pill Badges** → Semantic status indicators with proper spacing
+- **Size System** → xs, sm, md, lg, xl with proper height/padding ratios
+- **Variant System** → Primary, secondary, outline, ghost, destructive, success, warning
+- **Combination Classes** → Badge groups, button groups, badges with dots/remove buttons
+
 ### ✅ **Minimal Custom Utilities**
 - `.surfer-gradient-text` → Teal-to-cyan gradient text
 
@@ -71,6 +85,36 @@ Surfer is an **add-on layer** for shadcn/ui, not a replacement. We only provide 
 <Button variant="outline" className="font-sans">
   // Automatically inherits Surfer fonts
 </Button>
+
+// ✅ Use Heroicons with appropriate sizes
+import { HomeIcon, StarIcon, UserIcon } from '@heroicons/react/24/outline'
+
+<div className="flex items-center gap-2">
+  <HomeIcon className="h-6 w-6" />              // 24x24 outline
+  <StarIcon className="h-5 w-5 text-teal-500" />// 20x20 with Surfer color
+  <UserIcon className="h-4 w-4" />              // 16x16 solid
+</div>
+
+// ✅ Use Surfer pill components consistently
+<div className="surfer-btn-pill-group">
+  <button className="surfer-btn-pill surfer-btn-pill-md surfer-btn-pill-primary">
+    <StarIcon className="h-4 w-4" />
+    Primary Action
+  </button>
+  <button className="surfer-btn-pill surfer-btn-pill-md surfer-btn-pill-outline">
+    Secondary
+  </button>
+</div>
+
+// ✅ Use pill badges for status indicators
+<div className="surfer-badge-group">
+  <span className="surfer-badge-pill surfer-badge-pill-sm surfer-badge-pill-success">
+    Active
+  </span>
+  <span className="surfer-badge-pill surfer-badge-pill-sm surfer-badge-pill-warning surfer-badge-pill-dot">
+    3 Pending
+  </span>
+</div>
 ```
 
 ### **Anti-Patterns to Avoid**
@@ -84,6 +128,13 @@ Surfer is an **add-on layer** for shadcn/ui, not a replacement. We only provide 
 
 // ❌ Don't import JavaScript tokens
 import { customTokens } from 'bluewaves' // This no longer exists
+
+// ❌ Don't mix pill and regular button styles
+<button className="surfer-btn-pill rounded-md"> // Don't override rounded-full
+<button className="rounded-full px-2 py-1"> // Use surfer-btn-pill classes instead
+
+// ❌ Don't create custom badge combinations
+<span className="rounded-full px-2 py-1 bg-red-100"> // Use surfer-badge-pill variants
 ```
 
 ## 🎨 Color Strategy

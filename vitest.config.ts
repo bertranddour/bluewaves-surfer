@@ -18,7 +18,6 @@ export default defineConfig({
         'src/test/**/*',
         'src/cli/commands/**/*',  // CLI commands are harder to test with jsdom
         'src/cli/index.ts',
-        'src/cli/init.ts',
         'src/cli/templates/**/*'
       ]
     }

@@ -114,6 +114,9 @@ async function performUpdate(updateInfo: any, options: UpdateOptions) {
     // 4. Update components if needed
     await updateComponents(spinner, options)
     
+    // 5. Check and install Heroicons if not present
+    await checkAndInstallHeroicons(spinner, options)
+    
     spinner.succeed('Project updated successfully! 🎉')
     
     console.log('\n' + chalk.green.bold('✅ Update Complete!\n'))
@@ -121,7 +124,8 @@ async function performUpdate(updateInfo: any, options: UpdateOptions) {
     console.log(chalk.gray(`  • Updated from ${updateInfo.current} to ${updateInfo.latest}`))
     console.log(chalk.gray('  • Latest OKLCH color system improvements'))
     console.log(chalk.gray('  • Enhanced font loading and performance'))
-    console.log(chalk.gray('  • Bug fixes and new features\n'))
+    console.log(chalk.gray('  • Bug fixes and new features'))
+    console.log(chalk.gray('  • Heroicons for React available\n'))
     
     console.log(chalk.blue('🔄 You may need to restart your development server:'))
     console.log(chalk.gray('  npm run dev  # or yarn dev, pnpm dev\n'))
@@ -197,7 +201,7 @@ async function updateCSSImports(spinner: Ora) {
   }
 }
 
-async function updateComponents(spinner: Ora, options: UpdateOptions) {
+async function updateComponents(spinner: Ora, _options: UpdateOptions) {
   spinner.text = 'Checking component updates...'
   
   const componentsJsonPath = path.join(process.cwd(), 'components.json')
@@ -206,6 +210,56 @@ async function updateComponents(spinner: Ora, options: UpdateOptions) {
     // Components are managed by shadcn/ui, they automatically get latest versions
     // when reinstalled, so we just need to ensure compatibility
     spinner.text = 'Components are up to date'
+  }
+}
+
+async function checkAndInstallHeroicons(spinner: Ora, options: UpdateOptions) {
+  spinner.text = 'Checking for Heroicons...'
+  
+  const packageJsonPath = path.join(process.cwd(), 'package.json')
+  const packageJson = await fs.readJson(packageJsonPath)
+  
+  // Check if Heroicons is already installed
+  const hasHeroicons = packageJson.dependencies?.['@heroicons/react'] || packageJson.devDependencies?.['@heroicons/react']
+  
+  if (hasHeroicons) {
+    spinner.text = 'Heroicons is already installed'
+    return
+  }
+  
+  // Ask if user wants to install Heroicons
+  spinner.stop()
+  const { installHeroicons } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'installHeroicons',
+      message: 'Install Heroicons for React? (Recommended)',
+      default: true,
+    }
+  ])
+  
+  if (!installHeroicons) {
+    return
+  }
+  
+  spinner.start('Installing Heroicons for React...')
+  
+  try {
+    if (!options.skipInstall) {
+      const packageManager = await detectPackageManager()
+      const installCmd = packageManager === 'npm' ? 'install' : 'add'
+      
+      await execa(packageManager, [installCmd, '@heroicons/react'], {
+        cwd: process.cwd(),
+        stdio: options.verbose ? 'inherit' : 'pipe'
+      })
+      
+      spinner.text = 'Heroicons installation complete'
+    }
+  } catch {
+    const packageManager = await detectPackageManager();
+    const installCmd = packageManager === 'npm' ? 'npm install' : `${packageManager} add`;
+    spinner.warn(`Heroicons installation failed - you can install it manually: ${installCmd} @heroicons/react`)
   }
 }
 

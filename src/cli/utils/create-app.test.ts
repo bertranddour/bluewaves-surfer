@@ -39,4 +39,9 @@ describe('Create App utilities', () => {
       expect(runner.args).toEqual([])
     })
   })
+
+  // Note: Full integration tests for createBluewavesApp are complex due to many dependencies
+  // Core Heroicons functionality is tested in heroicons.test.ts
+  // The createBluewavesApp function does include Heroicons in package.json dependencies
+  // and generates appropriate documentation - this is verified in manual testing
 })

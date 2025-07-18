@@ -4,6 +4,7 @@ import path from 'path';
 import chalk from 'chalk';
 import ora, { type Ora } from 'ora';
 import { execa } from 'execa';
+import { getPackageManagerRunner } from './create-app.js';
 
 interface SurferInitOptions {
   packageManager?: string;
@@ -36,8 +37,11 @@ export async function initSurfer(options: SurferInitOptions = {}) {
     // 3. Configure shadcn/ui (optional)
     await configureShadcnUI(config, spinner);
     
-    // 4. Show completion message
-    await showCompletionMessage(spinner);
+    // 4. Install Heroicons (optional)
+    await installHeroicons(config, spinner);
+    
+    // 5. Show completion message
+    await showCompletionMessage(spinner, config.packageManager);
     
   } catch (error) {
     spinner.fail('Failed to setup Surfer design system');
@@ -63,15 +67,19 @@ async function validateNextJsProject(cwd: string) {
   // Check for Tailwind CSS
   const hasTailwind = packageJson.dependencies?.tailwindcss || packageJson.devDependencies?.tailwindcss;
   if (!hasTailwind) {
-    throw new Error('Tailwind CSS is not installed. Surfer requires Tailwind CSS v4.1+. Please install it first:\n\n  npm install -D tailwindcss@latest');
+    const packageManager = await detectPackageManager();
+    const installCmd = packageManager === 'npm' ? 'npm install -D' : `${packageManager} add -D`;
+    throw new Error(`Tailwind CSS is not installed. Surfer requires Tailwind CSS v4.1+. Please install it first:\n\n  ${installCmd} tailwindcss@latest`);
   }
   
   // Check Tailwind version (should be 4.1+)
   const tailwindVersion = packageJson.dependencies?.tailwindcss || packageJson.devDependencies?.tailwindcss;
   if (tailwindVersion && !tailwindVersion.includes('4.') && !tailwindVersion.includes('beta') && !tailwindVersion.includes('alpha')) {
+    const packageManager = await detectPackageManager();
+    const installCmd = packageManager === 'npm' ? 'npm install -D' : `${packageManager} add -D`;
     console.log(chalk.yellow('⚠️  Warning: Surfer is optimized for Tailwind CSS v4.1+'));
     console.log(chalk.gray('   Current version: ' + tailwindVersion));
-    console.log(chalk.gray('   Consider upgrading: npm install -D tailwindcss@latest\n'));
+    console.log(chalk.gray(`   Consider upgrading: ${installCmd} tailwindcss@latest\n`));
   }
 }
 
@@ -89,6 +97,12 @@ async function promptForConfig(options: SurferInitOptions) {
       type: 'confirm',
       name: 'setupThemes',
       message: 'Setup dark/light theme support?',
+      default: true,
+    },
+    {
+      type: 'confirm',
+      name: 'installHeroicons',
+      message: 'Install Heroicons for React? (Recommended)',
       default: true,
     }
   ]);
@@ -159,7 +173,7 @@ async function setupTokenCSS(config: { packageManager: string; skipInstall: bool
   spinner.text = 'Design tokens CSS setup complete';
 }
 
-async function configureShadcnUI(config: { setupShadcn: boolean }, spinner: Ora) {
+async function configureShadcnUI(config: { setupShadcn: boolean; packageManager: string }, spinner: Ora) {
   if (!config.setupShadcn) return;
   
   spinner.text = 'Configuring shadcn/ui...';
@@ -178,11 +192,31 @@ async function configureShadcnUI(config: { setupShadcn: boolean }, spinner: Ora)
     
     spinner.text = 'shadcn/ui configuration complete';
   } catch {
-    spinner.warn('shadcn/ui setup skipped - you can run "npx shadcn@latest init" manually');
+    const runner = getPackageManagerRunner(config.packageManager);
+    const runnerCmd = runner.command === 'bunx' ? 'bunx' : `${runner.command} ${runner.args.join(' ')}`.trim();
+    spinner.warn(`shadcn/ui setup skipped - you can run "${runnerCmd} shadcn@latest init" manually`);
   }
 }
 
-async function showCompletionMessage(spinner: Ora) {
+async function installHeroicons(config: { installHeroicons: boolean; packageManager: string; skipInstall: boolean }, spinner: Ora) {
+  if (!config.installHeroicons || config.skipInstall) return;
+  
+  spinner.text = 'Installing Heroicons for React...';
+  
+  try {
+    const installCmd = config.packageManager === 'npm' ? 'install' : 'add';
+    await execa(config.packageManager, [installCmd, '@heroicons/react'], {
+      cwd: process.cwd(),
+    });
+    
+    spinner.text = 'Heroicons installation complete';
+  } catch {
+    const installCmd = config.packageManager === 'npm' ? 'npm install' : `${config.packageManager} add`;
+    spinner.warn(`Heroicons installation failed - you can install it manually: ${installCmd} @heroicons/react`);
+  }
+}
+
+async function showCompletionMessage(spinner: Ora, packageManager: string) {
   spinner.succeed('Surfer design system setup complete! 🏄‍♂️');
   
   console.log('\n' + chalk.green.bold('✅ Setup Complete!\n'));
@@ -194,7 +228,15 @@ async function showCompletionMessage(spinner: Ora) {
   console.log(chalk.gray('   • Access via CSS: var(--color-teal-500), var(--font-sans)\n'));
   
   console.log(chalk.blue('🧩 Install shadcn/ui components as needed:'));
-  console.log(chalk.gray('   npx shadcn@latest add button card input\n'));
+  const runner = getPackageManagerRunner(packageManager);
+  const runnerCmd = runner.command === 'bunx' ? 'bunx' : `${runner.command} ${runner.args.join(' ')}`.trim();
+  console.log(chalk.gray(`   ${runnerCmd} shadcn@latest add button card input\n`));
+  
+  console.log(chalk.blue('🎨 Use Heroicons in your components:'));
+  console.log(chalk.gray('   import { HomeIcon } from "@heroicons/react/24/outline"  // 24x24 outline'));
+  console.log(chalk.gray('   import { StarIcon } from "@heroicons/react/24/solid"    // 24x24 solid'));
+  console.log(chalk.gray('   import { UserIcon } from "@heroicons/react/20/solid"    // 20x20 solid'));
+  console.log(chalk.gray('   import { BellIcon } from "@heroicons/react/16/solid"    // 16x16 solid\n'));
   
   console.log(chalk.blue('📚 Next steps:'));
   console.log(chalk.gray('   • Visit: https://surfer.bluewaves.boutique'));

@@ -208,6 +208,52 @@ Create example applications at:
 - `https://examples.surfer.bluewaves.boutique`
 - Showcase different templates (Dashboard, SaaS, E-commerce)
 
+## 🆕 New Features Migration
+
+### **Heroicons Integration (v1.2.0+)**
+
+If you're upgrading from an earlier version of Surfer, you now have access to the complete Heroicons library.
+
+#### **For New Projects**
+Heroicons are automatically included when you run:
+```bash
+npx bluewaves create my-app
+```
+
+#### **For Existing Projects**
+1. **Run the update command**:
+   ```bash
+   npx bluewaves update
+   ```
+   
+2. **Or install manually**:
+   ```bash
+   # Using your preferred package manager
+   npm install @heroicons/react
+   pnpm add @heroicons/react
+   yarn add @heroicons/react
+   ```
+
+3. **Start using Heroicons**:
+   ```tsx
+   import { HomeIcon, StarIcon } from '@heroicons/react/24/outline'
+   
+   export default function MyComponent() {
+     return (
+       <div className="flex items-center gap-2">
+         <HomeIcon className="h-6 w-6" />
+         <StarIcon className="h-5 w-5 text-teal-500" />
+       </div>
+     )
+   }
+   ```
+
+#### **Available Icon Variants**
+- `@heroicons/react/24/outline` - 24x24 outline icons
+- `@heroicons/react/24/solid` - 24x24 solid icons
+- `@heroicons/react/20/solid` - 20x20 solid icons
+- `@heroicons/react/16/solid` - 16x16 solid icons
+
 ## 📋 Post-Migration Checklist
 
 ### Required

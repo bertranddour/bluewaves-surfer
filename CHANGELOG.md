@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Pill-Shaped Component System**: Professional pill buttons and badges with consistent styling
+  - Pill buttons with 7 variants: primary, secondary, outline, ghost, destructive, success, warning
+  - Pill badges with 8 variants: primary, secondary, success, warning, danger, info, dark, light
+  - 5 size system: xs, sm, md, lg, xl with proper height/padding ratios
+  - Combination classes: badge groups, button groups, badges with dots/remove buttons
+  - Dark mode support and accessibility features
+- **Heroicons Integration**: Complete React icon library with all sizes and styles
+  - 24x24 outline icons (`@heroicons/react/24/outline`)
+  - 24x24 solid icons (`@heroicons/react/24/solid`)
+  - 20x20 solid icons (`@heroicons/react/20/solid`)
+  - 16x16 solid icons (`@heroicons/react/16/solid`)
+- **Enhanced CLI Commands**: All commands now support Heroicons installation
+  - `bluewaves create` - Includes Heroicons by default in new projects
+  - `bluewaves init` - Interactive prompt to install Heroicons
+  - `bluewaves update` - Detects and offers to install Heroicons if missing
+- **Package Manager Support**: Dynamic package manager detection for all error messages
+- **Documentation Updates**: Comprehensive examples and usage guides for Heroicons and pill components
 - Initial release of Surfer Design System
 - Core design tokens with OKLCH color system
 - Enhanced shadcn/ui components

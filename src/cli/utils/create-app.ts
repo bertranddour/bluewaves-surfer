@@ -302,6 +302,7 @@ async function installSurferDesignSystem(projectPath: string, config: any, _spin
     'next-themes': '^0.4.6',
     sonner: '^2.0.6',
     zod: '^4.0.5',
+    '@heroicons/react': '^2.0.0',
   }
 
   await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 })
@@ -573,6 +574,7 @@ This project was created with \`create-bluewaves-app\` and includes:
 - **Tailwind CSS v4** - Latest version with performance optimizations
 - **Framer Motion** - Smooth animations
 - **Next Themes** - Dark mode support
+- **Heroicons** - Beautiful SVG icons for React
 
 ## 🚀 Getting Started
 
@@ -603,6 +605,27 @@ All shadcn/ui components are in \`components/ui/\` - customize as needed.
 
 ### Styling
 Global styles are in \`app/globals.css\` with Surfer design system.
+
+### Icons
+Heroicons are available for all your icon needs in multiple sizes and styles:
+
+\`\`\`tsx
+import { HomeIcon } from '@heroicons/react/24/outline'  // 24x24 outline
+import { StarIcon } from '@heroicons/react/24/solid'    // 24x24 solid
+import { UserIcon } from '@heroicons/react/20/solid'    // 20x20 solid
+import { BellIcon } from '@heroicons/react/16/solid'    // 16x16 solid
+
+export default function Example() {
+  return (
+    <div className="flex items-center gap-2">
+      <HomeIcon className="h-6 w-6" />                 {/* 24x24 outline */}
+      <StarIcon className="h-6 w-6 text-yellow-500" /> {/* 24x24 solid */}
+      <UserIcon className="h-5 w-5" />                 {/* 20x20 solid */}
+      <BellIcon className="h-4 w-4" />                 {/* 16x16 solid */}
+    </div>
+  )
+}
+\`\`\`
 
 ## 🏄‍♂️ Surfer Commands
 
@@ -636,6 +659,7 @@ function printSuccessMessage(projectName: string, config: any) {
   console.log(chalk.gray(`   ✓ shadcn/ui (25+ components)`))
   console.log(chalk.gray(`   ✓ Tailwind CSS v4`))
   console.log(chalk.gray(`   ✓ TypeScript & ESLint`))
+  console.log(chalk.gray(`   ✓ Heroicons for React`))
   console.log(chalk.gray(`   ✓ ${config.template} template`))
   console.log()
   console.log(chalk.blue('🚀 Next steps:'))

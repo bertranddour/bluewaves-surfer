@@ -78,7 +78,7 @@ The package provides a CLI tool (`surfer`) with limited implementation:
 
 ## Key Files
 
-- `src/cli/init.ts` - Main CLI command for installing Surfer tokens in Next.js projects
+- `src/cli/utils/init-surfer.ts` - Main CLI utilities for installing Surfer tokens in Next.js projects
 - `src/components/index.ts` - Design philosophy exports and usage examples
 - `src/index.ts` - Main package entry point with version and branding
 - `src/tokens.ts` - Custom design tokens (OKLCH colors and fonts)
@@ -108,7 +108,7 @@ Uses **Vitest** for testing:
 - **Design Philosophy**: Token-based system that works with shadcn/ui rather than replacing it
 
 ### CLI Implementation
-The CLI (`src/cli/init.ts`) uses:
+The CLI (`src/cli/utils/init-surfer.ts`) uses:
 - **commander.js** for command parsing
 - **inquirer** for interactive prompts
 - **ora** for loading spinners
@@ -116,7 +116,7 @@ The CLI (`src/cli/init.ts`) uses:
 - **fs-extra** for file operations
 
 ### Build Process
-- **tsup** builds multiple entry points: `index`, `components/index`, `hooks/index`, `utils/index`, `cli/init`
+- **tsup** builds multiple entry points: `index`, `components/index`, `cli/index`
 - Supports both CJS and ESM formats
 - External dependencies: React ecosystem packages
 - "use client" banner only for non-CLI components
