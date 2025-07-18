@@ -5,6 +5,7 @@
     "**/*.spec.*",
     "**/*.stories.*",
     "src/test/**/*",
+    "src/cli/templates/**/*",
     "vitest.config.ts",
     "tsup.config.ts"
   ]

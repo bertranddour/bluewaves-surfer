@@ -6,10 +6,7 @@
  * @version 1.0.0
  */
 
-// Design Tokens
-export * from "./tokens"
-
-// Design Tokens & Utilities (no styled components - pure token approach)
+// CSS-first design tokens via @theme inline (no JavaScript tokens needed)
 
 // Utilities
 export * from "./lib/utils"
@@ -17,7 +14,7 @@ export * from "./lib/utils"
 // Note: Tailwind CSS v4.1 uses CSS-based configuration instead of JS config
 
 // Version
-export const VERSION = "1.1.0"
+export const VERSION = "1.1.2"
 
 // Surfer brand
 export const SURFER = {
@@ -26,6 +23,6 @@ export const SURFER = {
   emoji: "🏄‍♂️",
   version: VERSION,
   author: "Bluewaves",
-  website: "https://surfer.bluewaves.ai",
+  website: "https://surfer.bluewaves.boutique",
   repository: "https://github.com/bluewaves/surfer"
 } as const

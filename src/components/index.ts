@@ -1,8 +1,7 @@
 /**
  * 🏄‍♂️ Surfer Design System
- * Token-based design system for shadcn/ui
+ * CSS-first design system for shadcn/ui
  */
 
-// Design Tokens & Utilities
-export * from "../tokens"
+// Design Utilities
 export * from "../lib/utils"

@@ -14,7 +14,7 @@ We take security seriously. If you discover a security vulnerability in Surfer D
 
 ### How to Report
 
-1. **Email**: Send details to security@bluewaves.ai
+1. **Email**: Send details to security@bluewaves.boutique
 2. **Include**: 
    - Description of the vulnerability
    - Steps to reproduce
@@ -54,7 +54,7 @@ When using Surfer Design System:
 
 ## Security Contacts
 
-- **Primary**: security@bluewaves.ai
+- **Primary**: security@bluewaves.boutique
 - **Backup**: Contact via GitHub Issues (for non-sensitive reports)
 
 Thank you for helping keep Surfer Design System secure!

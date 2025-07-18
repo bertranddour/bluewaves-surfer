@@ -338,10 +338,10 @@ chore(deps): update dependencies
 
 ## 🆘 Getting Help
 
-- 📖 [Documentation](https://surfer.bluewaves.ai)
+- 📖 [Documentation](https://surfer.bluewaves.boutique)
 - 💬 [GitHub Discussions](https://github.com/bluewaves/surfer/discussions)
 - 🐛 [Issue Tracker](https://github.com/bluewaves/surfer/issues)
-- 📧 [Email Support](mailto:support@bluewaves.ai)
+- 📧 [Email Support](mailto:support@bluewaves.boutique)
 
 ## 📄 License
 

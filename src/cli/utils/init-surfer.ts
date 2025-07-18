@@ -1,17 +1,15 @@
-#!/usr/bin/env node
-
-import { Command } from 'commander';
 import inquirer from 'inquirer';
 import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
 import ora, { type Ora } from 'ora';
 import { execa } from 'execa';
-import { getPackageManagerRunner } from './utils/create-app.js';
 
 interface SurferInitOptions {
   packageManager?: string;
   skipInstall?: boolean;
+  force?: boolean;
+  verbose?: boolean;
 }
 
 export async function initSurfer(options: SurferInitOptions = {}) {
@@ -39,7 +37,7 @@ export async function initSurfer(options: SurferInitOptions = {}) {
     await configureShadcnUI(config, spinner);
     
     // 4. Show completion message
-    await showCompletionMessage(spinner, config.packageManager);
+    await showCompletionMessage(spinner);
     
   } catch (error) {
     spinner.fail('Failed to setup Surfer design system');
@@ -161,7 +159,7 @@ async function setupTokenCSS(config: { packageManager: string; skipInstall: bool
   spinner.text = 'Design tokens CSS setup complete';
 }
 
-async function configureShadcnUI(config: { setupShadcn: boolean; packageManager: string }, spinner: Ora) {
+async function configureShadcnUI(config: { setupShadcn: boolean }, spinner: Ora) {
   if (!config.setupShadcn) return;
   
   spinner.text = 'Configuring shadcn/ui...';
@@ -172,8 +170,7 @@ async function configureShadcnUI(config: { setupShadcn: boolean; packageManager:
     
     if (!await fs.pathExists(componentsJsonPath)) {
       // Initialize shadcn/ui with recommended config for Surfer
-      const runner = getPackageManagerRunner(config.packageManager);
-      await execa(runner.command, [...runner.args, 'shadcn@latest', 'init', '--yes', '--base-color', 'neutral'], {
+      await execa('npx', ['shadcn@latest', 'init', '--yes', '--base-color', 'neutral'], {
         cwd: process.cwd(),
         stdio: 'inherit'
       });
@@ -181,13 +178,11 @@ async function configureShadcnUI(config: { setupShadcn: boolean; packageManager:
     
     spinner.text = 'shadcn/ui configuration complete';
   } catch {
-    const runner = getPackageManagerRunner(config.packageManager);
-    const runnerCmd = runner.command === 'bunx' ? 'bunx' : `${runner.command} ${runner.args.join(' ')}`.trim();
-    spinner.warn(`shadcn/ui setup skipped - you can run "${runnerCmd} shadcn@latest init" manually`);
+    spinner.warn('shadcn/ui setup skipped - you can run "npx shadcn@latest init" manually');
   }
 }
 
-async function showCompletionMessage(spinner: Ora, packageManager: string) {
+async function showCompletionMessage(spinner: Ora) {
   spinner.succeed('Surfer design system setup complete! 🏄‍♂️');
   
   console.log('\n' + chalk.green.bold('✅ Setup Complete!\n'));
@@ -199,29 +194,10 @@ async function showCompletionMessage(spinner: Ora, packageManager: string) {
   console.log(chalk.gray('   • Access via CSS: var(--color-teal-500), var(--font-sans)\n'));
   
   console.log(chalk.blue('🧩 Install shadcn/ui components as needed:'));
-  const runner = getPackageManagerRunner(packageManager);
-  const runnerCmd = runner.command === 'bunx' ? 'bunx' : `${runner.command} ${runner.args.join(' ')}`.trim();
-  console.log(chalk.gray(`   ${runnerCmd} shadcn@latest add button card input\n`));
+  console.log(chalk.gray('   npx shadcn@latest add button card input\n'));
   
   console.log(chalk.blue('📚 Next steps:'));
   console.log(chalk.gray('   • Visit: https://surfer.bluewaves.boutique'));
   console.log(chalk.gray('   • Check out the token documentation'));
   console.log(chalk.gray('   • All components automatically inherit Surfer design! 🚀\n'));
-}
-
-// CLI command setup
-if (require.main === module) {
-  const program = new Command();
-  
-  program
-    .name('surfer')
-    .description('🏄‍♂️ Initialize Surfer design system')
-    .version('1.1.0')
-    .option('-pm, --package-manager <manager>', 'Package manager to use (npm, yarn, pnpm, bun)')
-    .option('--skip-install', 'Skip package installation')
-    .action(async (options) => {
-      await initSurfer(options);
-    });
-
-  program.parse();
 }

@@ -16,7 +16,10 @@ export default defineConfig({
         'src/**/*.{test,spec}.{ts,tsx}',
         'src/**/*.stories.{ts,tsx}',
         'src/test/**/*',
-        'src/cli/**/*'  // CLI commands are harder to test with jsdom
+        'src/cli/commands/**/*',  // CLI commands are harder to test with jsdom
+        'src/cli/index.ts',
+        'src/cli/init.ts',
+        'src/cli/templates/**/*'
       ]
     }
   },
@@ -24,10 +27,8 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
       '@/components': path.resolve(__dirname, './src/components'),
-      '@/hooks': path.resolve(__dirname, './src/hooks'),
       '@/lib': path.resolve(__dirname, './src/lib'),
-      '@/utils': path.resolve(__dirname, './src/utils'),
-      '@/tokens': path.resolve(__dirname, './src/tokens')
+      '@/utils': path.resolve(__dirname, './src/lib')
     }
   }
 })

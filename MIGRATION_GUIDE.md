@@ -198,14 +198,14 @@ The README already includes badges that will work once published:
 ## 🌍 Domain Setup (Optional)
 
 ### 1. Documentation Site
-Consider setting up a documentation site at `https://surfer.bluewaves.ai` using:
+Consider setting up a documentation site at `https://surfer.bluewaves.boutique` using:
 - Next.js with App Router
 - Deployed on Vercel
 - Automatic deployments from main branch
 
 ### 2. Example Site
 Create example applications at:
-- `https://examples.surfer.bluewaves.ai`
+- `https://examples.surfer.bluewaves.boutique`
 - Showcase different templates (Dashboard, SaaS, E-commerce)
 
 ## 📋 Post-Migration Checklist
@@ -230,7 +230,6 @@ Create example applications at:
 - [ ] Storybook deployed
 - [ ] Performance monitoring set up
 - [ ] Bundle analyzer integrated
-- [ ] VS Code extension created
 - [ ] Discord/Slack community
 
 ## 🚀 Launch Strategy
@@ -284,7 +283,7 @@ If you need help with the migration:
 - 📖 Check the documentation
 - 🐛 Create an issue
 - 💬 Start a discussion
-- 📧 Email support@bluewaves.ai
+- 📧 Email support@bluewaves.boutique
 
 ---
 

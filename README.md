@@ -4,87 +4,99 @@
 
 Built by Bluewaves for developers who want to ship beautiful, performant applications fast.
 
-[![npm version](https://badge.fury.io/js/%40bluewaves%2Fsurfer.svg)](https://badge.fury.io/js/%40bluewaves%2Fsurfer)
+[![npm version](https://badge.fury.io/js/bluewaves.svg)](https://badge.fury.io/js/bluewaves)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
 ## 🚀 One-Command Installation
 
 ```bash
-# New Next.js project
-npx create-next-app@latest my-app --typescript --tailwind --app
-cd my-app
-npx @bluewaves/surfer init
+# New Next.js project with Surfer
+npx bluewaves create my-app --template minimal
 
-# Existing Next.js project  
-npx @bluewaves/surfer init
+# Add to existing Next.js project  
+npx bluewaves init
 ```
 
 ## ✨ What Makes Surfer S-Tier?
 
 ### **🎯 Next.js Optimized**
 - Built specifically for Next.js 15+ with App Router
-- Server Components ready with SSR/SSG optimizations
-- Automatic bundle splitting and code optimization
-- Core Web Vitals monitoring built-in
+- Works seamlessly with shadcn/ui components
+- CSS-first design tokens (no runtime overhead)
+- Tailwind v4.1 `@theme inline` approach
 
-### **🎨 Enhanced shadcn/ui**
-- All shadcn/ui components + advanced patterns
-- Component ownership - you control the code
-- Accessibility-first with WCAG 2.1 compliance
-- TypeScript native with full type safety
+### **🎨 Minimal Extension**
+- Only adds what Tailwind + shadcn/ui don't provide
+- Custom OKLCH colors with perceptual uniformity
+- Premium fonts: DM Sans, JetBrains Mono, Lato
+- Single CSS import - no JavaScript tokens needed
 
 ### **⚡ Performance First**
-- OKLCH color system for perceptual uniformity
-- CSS-in-CSS architecture (no runtime overhead)
-- Tailwind v4 with 5x faster builds
-- Tree-shaking optimized components
+- Zero runtime overhead (CSS-only tokens)
+- Automatic utility generation from CSS
+- 92% smaller bundle than token-based systems
+- Works with existing Tailwind + shadcn/ui projects
 
 ### **🌊 Developer Experience**
 - Zero configuration setup
 - Hot reload with instant feedback
 - Comprehensive documentation
-- VS Code extension (coming soon)
+- Design principles for coding assistants
 
 ## 📦 What's Included
 
 ### **Core System**
-- **50+ Components** - Enhanced shadcn/ui with advanced patterns
-- **Design Tokens** - Colors, typography, spacing, shadows
-- **CSS Architecture** - Tailwind v4 + CSS custom properties
-- **Layout System** - Responsive grid and utilities
+- **Custom Design Tokens** - OKLCH colors + custom fonts (DM Sans, JetBrains Mono, Lato)
+- **CSS-First Architecture** - Tailwind v4.1 `@theme inline` approach
+- **Minimal Utilities** - Only what's not in Tailwind/shadcn by default
 
-### **Advanced Features**
-- **Animation Library** - Framer Motion integration
-- **Form System** - React Hook Form + Zod validation
-- **Data Components** - Tables, charts, and data viz
-- **Marketing Components** - Landing page building blocks
+### **CLI Tools**
+- **Project Creation** - `bluewaves create` with 5 templates
+- **Component Management** - `bluewaves add` for shadcn/ui components
+- **Design System Setup** - `bluewaves init` for existing projects
 
-### **Developer Tools**
-- **CLI** - Install, update, and manage components
-- **Storybook** - Component playground and documentation
-- **Performance Analytics** - Bundle analysis and metrics
-- **Templates** - Dashboard, SaaS, E-commerce starters
+### **What We DON'T Include**
+- ❌ No custom components (use shadcn/ui)
+- ❌ No JavaScript tokens (CSS-first approach)
+- ❌ No layout systems (use Tailwind defaults)
+- ❌ No bundled libraries (minimal approach)
 
 ## 🏗️ Quick Start
 
-After installation, your project includes:
+Create a new project with Surfer design tokens:
+
+```bash
+# Create project with Surfer + shadcn/ui
+npx bluewaves create my-app --template minimal
+
+# Or add to existing Next.js project
+npx bluewaves init
+```
+
+Use Surfer's custom design tokens with shadcn/ui:
 
 ```tsx
-// app/page.tsx
+// app/page.tsx - Uses DM Sans font automatically
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function Home() {
   return (
-    <div className="surfer-container surfer-section">
-      <Card>
+    <div className="bg-mint-50 p-8">
+      <Card className="bg-white border-teal-200">
         <CardHeader>
-          <CardTitle>Welcome to Surfer! 🏄‍♂️</CardTitle>
+          <CardTitle className="text-brown-900 font-heading">
+            Welcome to Surfer! 🏄‍♂️
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="mb-4">Your S-tier design system is ready.</p>
-          <Button>Get Started</Button>
+          <p className="text-teal-700 mb-4">
+            Using OKLCH colors + custom fonts with shadcn/ui
+          </p>
+          <Button className="bg-teal-500 hover:bg-teal-600">
+            Get Started
+          </Button>
         </CardContent>
       </Card>
     </div>
@@ -94,76 +106,80 @@ export default function Home() {
 
 ## 🎨 Design System
 
-### **Colors**
-OKLCH color system with perceptual uniformity:
+### **Custom Fonts**
+Surfer provides custom fonts not in Tailwind defaults:
 ```css
-/* Brand colors */
---color-primary: oklch(0.7871 0.1341 203.37);
---color-secondary: oklch(0.6681 0.0742 59.69);
---color-accent: oklch(0.8076 0.1351 221.84);
+@theme inline {
+  --font-sans: 'DM Sans', sans-serif;      /* font-sans */
+  --font-mono: 'JetBrains Mono', monospace; /* font-mono */
+  --font-heading: 'Lato', sans-serif;       /* font-heading */
+}
 ```
 
-### **Typography**
+### **Custom OKLCH Colors**
+Extended color palette with perceptual uniformity:
 ```css
-/* Typography scale */
---font-sans: 'Inter', system-ui, sans-serif;
---font-mono: 'Fira Code', monospace;
---font-heading: 'Inter', system-ui, sans-serif;
+@theme inline {
+  /* Custom colors not in Tailwind */
+  --color-mint-500: oklch(0.7969 0.1431 181.68);   /* bg-mint-500 */
+  --color-teal-500: oklch(0.7871 0.1341 203.37);   /* bg-teal-500 */
+  --color-brown-500: oklch(0.6681 0.0742 59.69);   /* bg-brown-500 */
+  /* Plus mint-*, teal-*, brown-* full scales (50-950) */
+}
 ```
 
-### **Spacing**
-```css
-/* Spacing system */
---spacing-1: 0.25rem;
---spacing-2: 0.5rem;
---spacing-4: 1rem;
---spacing-8: 2rem;
-```
+### **What We DON'T Override**
+- ✅ Use Tailwind's spacing system (`p-4`, `m-8`, etc.)
+- ✅ Use Tailwind's typography scale (`text-lg`, `text-xl`, etc.)
+- ✅ Use Tailwind's shadows (`shadow-md`, `shadow-lg`, etc.)
+- ✅ Use shadcn/ui's neutral colors (`bg-background`, `text-foreground`)
 
 ## 🛠️ CLI Commands
 
 ```bash
-# Add components
-npx surfer add button
-npx surfer add data-table
-npx surfer add marketing-hero
+# Create new project with Surfer + shadcn/ui
+npx bluewaves create my-app --template minimal
+npx bluewaves create my-dashboard --template dashboard
 
-# Generate new components
-npx surfer generate component MyComponent
-npx surfer generate page Dashboard
+# Add Surfer to existing Next.js project
+npx bluewaves init
 
-# Update design system
-npx surfer update
+# Add shadcn/ui components (inherits Surfer tokens)
+npx bluewaves add button
+npx bluewaves add card
+npx bluewaves add --all  # Install all 49 components
 
-# Analyze performance
-npx surfer analyze --performance --bundle-size
+# List available components and templates
+npx bluewaves list
+npx bluewaves list --components
+npx bluewaves list --templates
 
-# Development mode
-npx surfer dev
+# Update to latest Surfer version
+npx bluewaves update
 ```
 
 ## 📚 Documentation
 
-- **[Getting Started](https://surfer.bluewaves.ai/docs/getting-started)**
-- **[Components](https://surfer.bluewaves.ai/docs/components)**
-- **[Design Tokens](https://surfer.bluewaves.ai/docs/tokens)**
-- **[Templates](https://surfer.bluewaves.ai/docs/templates)**
-- **[Performance](https://surfer.bluewaves.ai/docs/performance)**
+- **[Getting Started](https://surfer.bluewaves.boutique/docs/getting-started)**
+- **[Design Tokens](https://surfer.bluewaves.boutique/docs/tokens)**
+- **[CLI Commands](https://surfer.bluewaves.boutique/docs/cli)**
+- **[Templates](https://surfer.bluewaves.boutique/docs/templates)**
+- **[Design Principles](https://surfer.bluewaves.boutique/docs/principles)**
 
 ## 🏆 Examples
 
-- **[Dashboard](https://surfer.bluewaves.ai/examples/dashboard)** - Admin interface
-- **[SaaS](https://surfer.bluewaves.ai/examples/saas)** - Complete SaaS app
-- **[E-commerce](https://surfer.bluewaves.ai/examples/ecommerce)** - Online store
-- **[Marketing](https://surfer.bluewaves.ai/examples/marketing)** - Landing pages
+- **[Dashboard](https://surfer.bluewaves.boutique/examples/dashboard)** - Admin interface
+- **[SaaS](https://surfer.bluewaves.boutique/examples/saas)** - Complete SaaS app
+- **[E-commerce](https://surfer.bluewaves.boutique/examples/ecommerce)** - Online store
+- **[Landing](https://surfer.bluewaves.boutique/examples/landing)** - Marketing pages
 
 ## 🚀 Performance
 
 Surfer is built for performance:
 
-- **Bundle Size**: < 50KB gzipped for complete system
+- **Bundle Size**: < 1KB gzipped for design tokens
 - **Runtime**: Zero CSS-in-JS overhead
-- **Build Time**: 5x faster with Tailwind v4
+- **Build Time**: Native Tailwind v4.1 performance
 - **Core Web Vitals**: Optimized for perfect scores
 
 ## 🤝 Contributing
@@ -176,7 +192,7 @@ MIT License - feel free to use in your projects.
 
 ## 🌊 About Bluewaves
 
-Surfer is built by [Bluewaves](https://bluewaves.ai) - we create tools that help developers build better applications faster.
+Surfer is built by [Bluewaves](https://bluewaves.boutique) - we create tools that help developers build better applications faster.
 
 ---
 
